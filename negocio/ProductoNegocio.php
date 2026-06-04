@@ -77,7 +77,49 @@ class ProductoNegocio {
         ];
     }
 
-    
+    public function obtenerProductoPorId(int $idProducto) {
+        if(!is_numeric($idProducto) || $idProducto <= 0) {
+            return null;
+        }
+        return $this->productoDatos->obtenerProductoPorId($idProducto);
+    }
 
+    public function actualizarProducto($datos) {
+        $errores = $this->validarProducto($datos);
+
+        if (!isset($datos['IdProducto']) || empty($datos['IdProducto'])) {
+            $errores[] = "El identificador del producto es obligatorio.";
+        }
+
+        if (!empty($errores)) {
+            return [
+                'exito' => false,
+                'errores' => $errores
+            ];
+        }
+
+        $producto = $this->limpiarDatos($datos);
+        $producto['IdProducto'] = (int)$datos['IdProducto'];
+        $resultado = $this->productoDatos->actualizarProducto($producto);
+
+        return [
+            'exito' => $resultado,
+            'mensaje' => $resultado ? 'Producto actualizado exitosamente.' : 'No se pudo actualizar el producto.'
+        ];
+    }
+
+    public function eliminarProducto(int $idProducto) {
+        if(!is_numeric($idProducto) || $idProducto <= 0) {
+            return ['exito' => false, 'mensaje' => 'Identificador de producto no válido.'];
+        }
+
+        $resultado = $this->productoDatos->eliminarProducto($idProducto);
+
+        return [
+            'exito' => $resultado,
+            'mensaje' => $resultado ? 'Producto eliminado correctamente.' : 'No se pudo eliminar el producto.'
+        ];
+    }
+    
 
 }

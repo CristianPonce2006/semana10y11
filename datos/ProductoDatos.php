@@ -82,7 +82,15 @@ class ProductoDatos {
         ]);
     }
 
-    
+    public function eliminarProducto($idProducto) {
+        $conexion = new Conexion();
+
+        $conexion->query = "UPDATE tbl_productos SET EstadoProducto = 'Eliminado' WHERE IdProducto = :idProducto";
+
+        return $conexion->execute_query([':idProducto' => $idProducto]);
+    }
+
+
 
 
 }
