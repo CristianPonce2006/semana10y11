@@ -15,11 +15,13 @@ class ClienteNegocio{
         private function limpiarDatos($datos)
     {
         return [
-            'NombreCliente' => trim($datos['NombreCliente']),
-            'DUI' => isset($datos['DUI']) ? trim($datos['DUI']) : '',
-            'NIT' => isset($datos['NIT']) ? trim($datos['NIT']) : '',
-            'Telefono' => isset($datos['Telefono']) ? trim($datos['Telefono']) : '',
-            'Direccion' => isset($datos['Direccion']) ? trim($datos['Direccion']) : ''
+                'NombreCliente' => trim($datos['NombreCliente']),
+                'DUI' => isset($datos['DUI']) ? trim($datos['DUI']) : '',
+                'NIT' => isset($datos['NIT']) ? trim($datos['NIT']) : '',
+                'Telefono' => isset($datos['Telefono']) ? trim($datos['Telefono']) : '',
+                'Direccion' => isset($datos['Direccion']) ? trim($datos['Direccion']) : '',
+                'Tipo' => isset($datos['Tipo']) ? trim($datos['Tipo']) : null,
+                'NRC' => isset($datos['NRC']) ? trim($datos['NRC']) : null
         ];
     }
 
@@ -51,6 +53,16 @@ class ClienteNegocio{
             $errores[] = "La dirección no debe superar los 255 caracteres.";
         }
 
+        // Validar Tipo si está presente
+        if (isset($datos['Tipo']) && !in_array($datos['Tipo'], ['PN', 'PJ'])) {
+            $errores[] = "Tipo de cliente inválido. Debe ser 'PN' o 'PJ'.";
+        }
+
+        // Validar NRC si está presente
+        if (!empty($datos['NRC']) && strlen(trim($datos['NRC'])) > 15) {
+            $errores[] = "El NRC no debe superar los 15 caracteres.";
+        }
+
         return $errores;
     }
 
@@ -71,7 +83,7 @@ class ClienteNegocio{
 
         return [
             'exito' => $resultado,
-            'mensaje' => $resultado ? 'Cliente registrado correctamente.' : 'No se pudo registrar el cliente.'
+            'errores' => $resultado ? [] : ['Error al insertar el cliente en la base de datos.']
         ];
     }
 
@@ -102,10 +114,9 @@ class ClienteNegocio{
         $cliente['IdCliente'] = (int) $datos['IdCliente'];
 
         $resultado = $this->clienteDatos->actualizarCliente($cliente);
-
         return [
             'exito' => $resultado,
-            'mensaje' => $resultado ? 'Cliente actualizado correctamente.' : 'No se pudo actualizar el cliente.'
+            'errores' => $resultado ? [] : ['Error al actualizar el cliente en la base de datos.']
         ];
     }
 
@@ -119,10 +130,9 @@ class ClienteNegocio{
         }
 
         $resultado = $this->clienteDatos->eliminarCliente($idCliente);
-
         return [
             'exito' => $resultado,
-            'mensaje' => $resultado ? 'Cliente eliminado correctamente.' : 'No se pudo eliminar el cliente.'
+            'errores' => $resultado ? [] : ['Error al eliminar el cliente de la base de datos.']
         ];
     }
 

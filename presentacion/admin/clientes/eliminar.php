@@ -52,6 +52,8 @@ function mostrarValor($valor) {
                 </div>
                 <p><strong>Nombre:</strong> <?php echo mostrarValor($cliente['NombreCliente']); ?></p>
                 <p><strong>DUI:</strong> <?php echo mostrarValor($cliente['DUI']); ?></p>
+                <p><strong>Tipo:</strong> <?php echo mostrarValor($cliente['Tipo']); ?></p>
+                <p><strong>NCR:</strong> <?php echo mostrarValor($cliente['NCR']); ?></p>
                 <p><strong>Teléfono:</strong> <?php echo mostrarValor($cliente['Telefono']); ?></p>
                 <form method="POST" action="eliminar.php?id=<?php echo mostrarValor($cliente['IdCliente']); ?>">
                     <input type="hidden" name="IdCliente" value="<?php echo mostrarValor($cliente['IdCliente']); ?>">

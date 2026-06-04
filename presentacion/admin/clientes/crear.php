@@ -11,7 +11,9 @@ $datos = [
     'DUI' => '',
     'NIT' => '',
     'Telefono' => '',
-    'Direccion' => ''
+    'Direccion' => '',
+    'Tipo' => 'PN',
+    'NRC' => ''
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,7 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'DUI' => $_POST['DUI'] ?? '',
         'NIT' => $_POST['NIT'] ?? '',
         'Telefono' => $_POST['Telefono'] ?? '',
-        'Direccion' => $_POST['Direccion'] ?? ''
+            'Direccion' => $_POST['Direccion'] ?? '',
+            'Tipo' => $_POST['Tipo'] ?? 'PN',
+            'NRC' => $_POST['NRC'] ?? ''
     ];
 
     $resultado = $clienteNegocio->crearCliente($datos);
@@ -70,7 +74,7 @@ function mostrarValor($valor){
                 <form action="crear.php" method="POST">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre del cliente</label>
-                        <input type="text" class="form-control" id="nombre" name="NombreCliente" required>
+                        <input type="text" class="form-control" id="nombre" name="NombreCliente" value="<?php echo mostrarValor($datos['NombreCliente']); ?>" required>
                     </div>
 
                     <div class="mb-3">
@@ -90,7 +94,20 @@ function mostrarValor($valor){
 
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
-                        <textarea class="form-control" id="direccion" name="Direccion" rows="3"></textarea>
+                        <textarea class="form-control" id="direccion" name="Direccion" rows="3"><?php echo mostrarValor($datos['Direccion']); ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select id="tipo" name="Tipo" class="form-select">
+                            <option value="PN" <?php echo ($datos['Tipo'] === 'PN') ? 'selected' : ''; ?>>Persona Natural (PN)</option>
+                            <option value="PJ" <?php echo ($datos['Tipo'] === 'PJ') ? 'selected' : ''; ?>>Persona Jurídica (PJ)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="NRC" class="form-label">NRC</label>
+                        <input type="text" class="form-control" id="NRC" name="NRC" maxlength="15" value="<?php echo mostrarValor($datos['NRC']); ?>">
                     </div>
 
                     <button type="submit" class="btn btn-success">Guardar cliente</button>

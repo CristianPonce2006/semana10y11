@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'DUI' => $_POST['DUI'] ?? '',
         'NIT' => $_POST['NIT'] ?? '',
         'Telefono' => $_POST['Telefono'] ?? '',
-        'Direccion' => $_POST['Direccion'] ?? ''
+        'Direccion' => $_POST['Direccion'] ?? '',
+        'Tipo' => $_POST['Tipo'] ?? null,
+        'NRC' => $_POST['NRC'] ?? ''
     ];
 
     $resultado = $clienteNegocio->actualizarCliente($datos);
@@ -84,6 +86,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="nombre" class="form-label">Nombre del cliente</label>
                         <input type="text" class="form-control" id="nombre" name="NombreCliente"
                             value="<?php echo mostrarValor($cliente['NombreCliente']); ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select id="tipo" name="Tipo" class="form-select">
+                            <option value="PN" <?php echo ($cliente['Tipo'] === 'PN') ? 'selected' : ''; ?>>Persona Natural (PN)</option>
+                            <option value="PJ" <?php echo ($cliente['Tipo'] === 'PJ') ? 'selected' : ''; ?>>Persona Jurídica (PJ)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="NRC" class="form-label">NRC</label>
+                        <input type="text" class="form-control" id="NRC" name="NRC" maxlength="15" value="<?php echo mostrarValor($cliente['NRC']); ?>">
                     </div>
 
                     <div class="mb-3">

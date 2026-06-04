@@ -43,30 +43,34 @@ function mostrarValor($valor){
 
             <div class="card shadow">
                 <div class="card-header bg-dark text-white">
-                    Clientes registrados
-                </div>
-
-                <div class="card-body table-responsive">
-                    <table class="table table-bordered table-hover align-middle" id="tablaClientes">
-                    <thead class="table-dark">
-                        <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Estado</th>
-                        <th>DUI</th>
-                        <th>NIT</th>
-                        <th>Teléfono</th>
-                        <th>Dirección</th>
-                        <th width="180">Acciones</th>
+                        <table class="table table-bordered table-hover align-middle" id="tablaClientes">
+                        <thead class="table-dark">
+                            <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Tipo</th>
+                            <th>NRC</th>
+                            <th>DUI</th>
+                            <th>NIT</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th width="180">Acciones</th>
+                            </tr>
+                        </thead>
+                        
+                        <input type="text" id="buscador" class="form-control" placeholder="Buscar por ID, nombre, DUI, teléfono, tipo o NRC...">
                         </tr>
                     </thead>
                     <tbody id="cuerpoTabla">
                         <?php if (!empty($clientes)): ?>
                             <?php foreach ($clientes as $cliente): ?>
-                                <tr class="fila-cliente" data-id="<?php echo $cliente['IdCliente']; ?>" data-nombre="<?php echo strtolower($cliente['NombreCliente']); ?>" data-dui="<?php echo strtolower($cliente['DUI']); ?>" data-telefono="<?php echo strtolower($cliente['Telefono']); ?>">
+                                <tr class="fila-cliente" data-id="<?php echo $cliente['IdCliente']; ?>" data-nombre="<?php echo strtolower($cliente['NombreCliente']); ?>" data-dui="<?php echo strtolower($cliente['DUI']); ?>" data-telefono="<?php echo strtolower($cliente['Telefono']); ?>" data-tipo="<?php echo strtolower($cliente['Tipo']); ?>" data-NRC="<?php echo strtolower($cliente['NRC']); ?>">
                                     <td><?php echo mostrarValor($cliente['IdCliente']); ?></td>
                                     <td><?php echo mostrarValor($cliente['NombreCliente']); ?></td>
                                     <td><span class="badge bg-success"><?php echo mostrarValor($cliente['EstadoCliente']); ?></span></td>
+                                    <td><?php echo mostrarValor($cliente['Tipo']); ?></td>
+                                    <td><?php echo mostrarValor($cliente['NRC']); ?></td>
                                     <td><?php echo mostrarValor($cliente['DUI']); ?></td>
                                     <td><?php echo mostrarValor($cliente['NIT']); ?></td>
                                     <td><?php echo mostrarValor($cliente['Telefono']); ?></td>
@@ -84,7 +88,7 @@ function mostrarValor($valor){
                             <?php endforeach; ?>
                             <?php else: ?>
                                 <tr id="mensajeVacio">
-                                    <td colspan="8" class="text-center">
+                                    <td colspan="10" class="text-center">
                                         No hay clientes registrados
                                     </td>
                                 </tr>
@@ -109,8 +113,10 @@ function mostrarValor($valor){
                 const nombre = fila.getAttribute('data-nombre');
                 const dui = fila.getAttribute('data-dui');
                 const telefono = fila.getAttribute('data-telefono');
+                const tipo = fila.getAttribute('data-tipo') || '';
+                const nrc = fila.getAttribute('data-nrc') || '';
 
-                if (id.includes(busqueda) || nombre.includes(busqueda) || dui.includes(busqueda) || telefono.includes(busqueda)) {
+                if (id.includes(busqueda) || nombre.includes(busqueda) || dui.includes(busqueda) || telefono.includes(busqueda) || tipo.includes(busqueda) || nrc.includes(busqueda)) {
                     fila.style.display = '';
                     filasVisibles++;
                 } else {
@@ -133,7 +139,7 @@ function mostrarValor($valor){
                 if (tbody.children.length === 0) {
                     const fila = tbody.insertRow();
                     const celda = fila.insertCell(0);
-                    celda.colSpan = 8;
+                    celda.colSpan = 10;
                     celda.textContent = 'No hay clientes registrados';
                     celda.className = 'text-center';
                     celda.id = 'mensajeVacio';

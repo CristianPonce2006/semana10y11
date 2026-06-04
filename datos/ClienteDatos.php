@@ -4,7 +4,7 @@ class ClienteDatos {
 	public function listarClientes(){
         $conexion = new Conexion();
 
-        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente
+        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente, Tipo, NRC
                             FROM tbl_clientes
                             WHERE EstadoCliente = 'Activo'
                             ORDER BY IdCliente DESC";
@@ -20,15 +20,17 @@ class ClienteDatos {
     {
         $conexion = new Conexion();
 
-        $conexion->query = "INSERT INTO tbl_clientes (NombreCliente, DUI, NIT, Telefono, Direccion)
-                            VALUES (:nombre, :dui, :nit, :telefono, :direccion)";
+        $conexion->query = "INSERT INTO tbl_clientes (NombreCliente, DUI, NIT, Telefono, Direccion, Tipo, NRC)
+                            VALUES (:nombre, :dui, :nit, :telefono, :direccion, :tipo, :NRC)";
 
         return $conexion->execute_query([
             ':nombre'   => $cliente['NombreCliente'],
             ':dui'      => $this->valorNulo($cliente['DUI']),
             ':nit'      => $this->valorNulo($cliente['NIT']),
             ':telefono' => $this->valorNulo($cliente['Telefono']),
-            ':direccion'=> $this->valorNulo($cliente['Direccion'])
+            ':direccion'=> $this->valorNulo($cliente['Direccion']),
+            ':tipo'     => isset($cliente['Tipo']) ? $cliente['Tipo'] : null,
+            ':NRC'      => $this->valorNulo($cliente['NRC'])
         ]);
     }
 
@@ -38,7 +40,7 @@ class ClienteDatos {
         $conexion = new Conexion();
 
         $conexion->query = "UPDATE tbl_clientes SET NombreCliente = :nombre, DUI = :dui,
-                            NIT = :nit, Telefono = :telefono, Direccion = :direccion
+                            NIT = :nit, Telefono = :telefono, Direccion = :direccion, Tipo = :tipo, NRC = :NRC
                             WHERE IdCliente = :idCliente";
 
         return $conexion->execute_query([
@@ -47,6 +49,8 @@ class ClienteDatos {
             ':nit'       => $this->valorNulo($cliente['NIT']),
             ':telefono'  => $this->valorNulo($cliente['Telefono']),
             ':direccion' => $this->valorNulo($cliente['Direccion']),
+            ':tipo'      => isset($cliente['Tipo']) ? $cliente['Tipo'] : null,
+            ':NRC'       => $this->valorNulo($cliente['NRC']),
             ':idCliente' => $cliente['IdCliente']
         ]);
     }
@@ -55,7 +59,7 @@ class ClienteDatos {
     {
         $conexion = new Conexion();
 
-        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente
+        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente, Tipo, NRC
                             FROM tbl_clientes
                             WHERE IdCliente = :idCliente";
 
