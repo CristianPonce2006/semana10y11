@@ -1,7 +1,25 @@
 <?php
 require_once __DIR__.'/Conexion.php';
-class UsuarioDatos {
-    
 
-    
+class UsuarioDatos {
+    public function listarUsuarios() {
+        $conexion = new Conexion();
+
+        $conexion->query = "SELECT IdUsuario, NombreCompleto
+                            FROM tbl_usuarios
+                            WHERE EstadoUsuario = 'Activo'
+                            ORDER BY NombreCompleto ASC";
+
+        return $conexion->get_records();
+    }
+
+    public function obtenerUsuarioPorId($idUsuario) {
+        $conexion = new Conexion();
+
+        $conexion->query = "SELECT IdUsuario, NombreCompleto, Usuario, TipoCuenta, EstadoUsuario
+                            FROM tbl_usuarios
+                            WHERE IdUsuario = :idUsuario";
+
+        return $conexion->get_record([':idUsuario' => $idUsuario]);
+    }
 }
