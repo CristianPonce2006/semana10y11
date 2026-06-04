@@ -52,6 +52,7 @@ function mostrarValor($valor){
                         <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>Estado</th>
                         <th>DUI</th>
                         <th>NIT</th>
                         <th>Teléfono</th>
@@ -65,6 +66,7 @@ function mostrarValor($valor){
                                 <tr class="fila-cliente" data-id="<?php echo $cliente['IdCliente']; ?>" data-nombre="<?php echo strtolower($cliente['NombreCliente']); ?>" data-dui="<?php echo strtolower($cliente['DUI']); ?>" data-telefono="<?php echo strtolower($cliente['Telefono']); ?>">
                                     <td><?php echo mostrarValor($cliente['IdCliente']); ?></td>
                                     <td><?php echo mostrarValor($cliente['NombreCliente']); ?></td>
+                                    <td><span class="badge bg-success"><?php echo mostrarValor($cliente['EstadoCliente']); ?></span></td>
                                     <td><?php echo mostrarValor($cliente['DUI']); ?></td>
                                     <td><?php echo mostrarValor($cliente['NIT']); ?></td>
                                     <td><?php echo mostrarValor($cliente['Telefono']); ?></td>
@@ -82,7 +84,7 @@ function mostrarValor($valor){
                             <?php endforeach; ?>
                             <?php else: ?>
                                 <tr id="mensajeVacio">
-                                    <td colspan="7" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         No hay clientes registrados
                                     </td>
                                 </tr>
@@ -131,7 +133,7 @@ function mostrarValor($valor){
                 if (tbody.children.length === 0) {
                     const fila = tbody.insertRow();
                     const celda = fila.insertCell(0);
-                    celda.colSpan = 7;
+                    celda.colSpan = 8;
                     celda.textContent = 'No hay clientes registrados';
                     celda.className = 'text-center';
                     celda.id = 'mensajeVacio';

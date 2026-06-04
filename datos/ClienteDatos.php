@@ -4,8 +4,9 @@ class ClienteDatos {
 	public function listarClientes(){
         $conexion = new Conexion();
 
-        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion
+        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente
                             FROM tbl_clientes
+                            WHERE EstadoCliente = 'Activo'
                             ORDER BY IdCliente DESC";
 
         return $conexion->get_records();
@@ -54,7 +55,7 @@ class ClienteDatos {
     {
         $conexion = new Conexion();
 
-        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion
+        $conexion->query = "SELECT IdCliente, NombreCliente, DUI, NIT, Telefono, Direccion, EstadoCliente
                             FROM tbl_clientes
                             WHERE IdCliente = :idCliente";
 
@@ -65,12 +66,12 @@ class ClienteDatos {
     {
         $conexion = new Conexion();
 
-        $conexion->query = "DELETE FROM tbl_clientes WHERE IdCliente = :idCliente";
+        $conexion->query = "UPDATE tbl_clientes SET EstadoCliente = 'Eliminado' WHERE IdCliente = :idCliente";
 
         return $conexion->execute_query([':idCliente' => $idCliente]);
 
     
     }
 
-    
+
 }

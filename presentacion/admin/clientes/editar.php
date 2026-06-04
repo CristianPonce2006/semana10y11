@@ -75,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </ul>
                     </div>
                 <?php endif; ?>
+                <div class="mb-3">
+                    <label class="form-label">Estado del cliente</label>
+                    <div><span class="badge bg-<?php echo $cliente['EstadoCliente'] === 'Activo' ? 'success' : 'secondary'; ?>"><?php echo mostrarValor($cliente['EstadoCliente']); ?></span></div>
+                </div>
                 <form action="editar.php?id=<?php echo mostrarValor($cliente['IdCliente']); ?>" method="POST">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre del cliente</label>
