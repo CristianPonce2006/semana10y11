@@ -19,4 +19,24 @@ class UsuarioNegocio {
 
         return $this->usuarioDatos->obtenerUsuarioPorId($idUsuario);
     }
+
+    
+
+    public function validarLogin(string $usuario, string $password) {
+       
+        if (empty($usuario) || empty($password)) {
+            return null;
+        }
+
+       $usuarioEncontrado = $this->usuarioDatos->obtenerUsuarioPorNombre($usuario);
+        if ($usuarioEncontrado === null) {
+            return null;
+        }
+
+        if (!password_verify($password, $usuarioEncontrado['Password'])) {
+            return null;
+        }
+
+        return $usuarioEncontrado;
+    }
 }

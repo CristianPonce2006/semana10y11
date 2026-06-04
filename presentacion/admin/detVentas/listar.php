@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../../negocio/DetVentaNegocio.php';
+require_once __DIR__.'/../../includes/navbaradmin.php';
 
 $detVentaNegocio = new DetVentaNegocio();
 $mensaje = $_GET['mensaje'] ?? '';

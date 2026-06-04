@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../../../negocio/MarcaNegocio.php';
+require_once __DIR__.'/../../includes/navbaradmin.php';
 $mensaje = $_GET['mensaje'] ?? '';
 $marcaNegocio = new MarcaNegocio();
 
