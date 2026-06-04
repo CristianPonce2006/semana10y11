@@ -35,6 +35,11 @@ function mostrarValor($valor){
                     <div class="alert alert-success">Marca eliminada correctamente.</div>
                 <?php endif; ?>
 
+            <div class="card shadow mb-3">
+                <div class="card-body">
+                    <input type="text" id="buscador" class="form-control" placeholder="Buscar por ID o nombre...">
+                </div>
+            </div>
 
             <div class="card shadow">
                 <div class="card-header bg-dark text-white">
@@ -42,7 +47,7 @@ function mostrarValor($valor){
                 </div>
 
                 <div class="card-body table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
+                    <table class="table table-bordered table-hover align-middle" id="tablaMarcas">
                     <thead class="table-dark">
                         <tr>
                         <th>ID</th>
@@ -51,10 +56,10 @@ function mostrarValor($valor){
                         <th width="180">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="cuerpoTabla">
                         <?php if (!empty($marcas)): ?>
                             <?php foreach ($marcas as $marca): ?>
-                                <tr>
+                                <tr class="fila-marca" data-id="<?php echo $marca['IdMarca']; ?>" data-nombre="<?php echo strtolower($marca['NombreMarca']); ?>">
                                     <td><?php echo mostrarValor($marca['IdMarca']); ?></td>
                                     <td><?php echo mostrarValor($marca['NombreMarca']); ?></td>
                                     <td>
@@ -72,7 +77,7 @@ function mostrarValor($valor){
                                 </tr>
                             <?php endforeach; ?>
                             <?php else: ?>
-                                <tr>
+                                <tr id="mensajeVacio">
                                     <td colspan="4" class="text-center">
                                         No hay marcas registradas
                                     </td>
@@ -87,5 +92,46 @@ function mostrarValor($valor){
 
         </div>
     <script src="../../../public/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('buscador').addEventListener('keyup', function() {
+            const busqueda = this.value.toLowerCase();
+            const filas = document.querySelectorAll('.fila-marca');
+            let filasVisibles = 0;
+
+            filas.forEach(fila => {
+                const id = fila.getAttribute('data-id');
+                const nombre = fila.getAttribute('data-nombre');
+
+                if (id.includes(busqueda) || nombre.includes(busqueda)) {
+                    fila.style.display = '';
+                    filasVisibles++;
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+
+            // Mostrar/ocultar mensaje de sin resultados
+            const mensajeVacio = document.getElementById('mensajeVacio');
+            if (mensajeVacio) {
+                if (filasVisibles === 0 && busqueda.length > 0) {
+                    mensajeVacio.style.display = '';
+                    mensajeVacio.querySelector('td').textContent = 'No se encontraron marcas con ese criterio de búsqueda.';
+                } else {
+                    mensajeVacio.style.display = 'none';
+                }
+            } else if (filasVisibles === 0 && busqueda.length === 0) {
+                // Si no hay resultados y no hay búsqueda activa, mostrar mensaje original
+                const tbody = document.getElementById('cuerpoTabla');
+                if (tbody.children.length === 0) {
+                    const fila = tbody.insertRow();
+                    const celda = fila.insertCell(0);
+                    celda.colSpan = 4;
+                    celda.textContent = 'No hay marcas registradas';
+                    celda.className = 'text-center';
+                    celda.id = 'mensajeVacio';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

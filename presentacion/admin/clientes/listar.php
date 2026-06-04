@@ -35,6 +35,11 @@ function mostrarValor($valor){
                     <div class="alert alert-success">Cliente eliminado correctamente.</div>
                 <?php endif; ?>
 
+            <div class="card shadow mb-3">
+                <div class="card-body">
+                    <input type="text" id="buscador" class="form-control" placeholder="Buscar por ID, nombre, DUI o teléfono...">
+                </div>
+            </div>
 
             <div class="card shadow">
                 <div class="card-header bg-dark text-white">
@@ -42,7 +47,7 @@ function mostrarValor($valor){
                 </div>
 
                 <div class="card-body table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
+                    <table class="table table-bordered table-hover align-middle" id="tablaClientes">
                     <thead class="table-dark">
                         <tr>
                         <th>ID</th>
@@ -54,10 +59,10 @@ function mostrarValor($valor){
                         <th width="180">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="cuerpoTabla">
                         <?php if (!empty($clientes)): ?>
                             <?php foreach ($clientes as $cliente): ?>
-                                <tr>
+                                <tr class="fila-cliente" data-id="<?php echo $cliente['IdCliente']; ?>" data-nombre="<?php echo strtolower($cliente['NombreCliente']); ?>" data-dui="<?php echo strtolower($cliente['DUI']); ?>" data-telefono="<?php echo strtolower($cliente['Telefono']); ?>">
                                     <td><?php echo mostrarValor($cliente['IdCliente']); ?></td>
                                     <td><?php echo mostrarValor($cliente['NombreCliente']); ?></td>
                                     <td><?php echo mostrarValor($cliente['DUI']); ?></td>
@@ -76,7 +81,7 @@ function mostrarValor($valor){
                                 </tr>
                             <?php endforeach; ?>
                             <?php else: ?>
-                                <tr>
+                                <tr id="mensajeVacio">
                                     <td colspan="7" class="text-center">
                                         No hay clientes registrados
                                     </td>
@@ -91,5 +96,48 @@ function mostrarValor($valor){
 
         </div>
     <script src="../../../public/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('buscador').addEventListener('keyup', function() {
+            const busqueda = this.value.toLowerCase();
+            const filas = document.querySelectorAll('.fila-cliente');
+            let filasVisibles = 0;
+
+            filas.forEach(fila => {
+                const id = fila.getAttribute('data-id');
+                const nombre = fila.getAttribute('data-nombre');
+                const dui = fila.getAttribute('data-dui');
+                const telefono = fila.getAttribute('data-telefono');
+
+                if (id.includes(busqueda) || nombre.includes(busqueda) || dui.includes(busqueda) || telefono.includes(busqueda)) {
+                    fila.style.display = '';
+                    filasVisibles++;
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+
+            // Mostrar/ocultar mensaje de sin resultados
+            const mensajeVacio = document.getElementById('mensajeVacio');
+            if (mensajeVacio) {
+                if (filasVisibles === 0 && busqueda.length > 0) {
+                    mensajeVacio.style.display = '';
+                    mensajeVacio.querySelector('td').textContent = 'No se encontraron clientes con ese criterio de búsqueda.';
+                } else {
+                    mensajeVacio.style.display = 'none';
+                }
+            } else if (filasVisibles === 0 && busqueda.length === 0) {
+                // Si no hay resultados y no hay búsqueda activa, mostrar mensaje original
+                const tbody = document.getElementById('cuerpoTabla');
+                if (tbody.children.length === 0) {
+                    const fila = tbody.insertRow();
+                    const celda = fila.insertCell(0);
+                    celda.colSpan = 7;
+                    celda.textContent = 'No hay clientes registrados';
+                    celda.className = 'text-center';
+                    celda.id = 'mensajeVacio';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
